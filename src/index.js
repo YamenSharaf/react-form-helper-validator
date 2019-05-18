@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 
-const FormValidator = ({ children, model, rules }) => {
+const FormValidator = ({
+  children,
+  model = {},
+  rules = {},
+  manual: manualValidationList = []
+}) => {
   const [formData, setFormData] = useState(model);
 
   const initialErrorObject = Object.keys(formData).reduce((map, key) => {
@@ -81,6 +86,17 @@ const FormValidator = ({ children, model, rules }) => {
     return { errors, hasErrors };
   };
 
+  const validateField = ({ target: { name } }) => {
+    if (!rules[name]) return;
+
+    rules[name].forEach(rule => {
+      const errorMessage = rule(formData[name]);
+      errorMessage &&
+        formErrors[name] === null &&
+        setFieldError(name, errorMessage);
+    });
+  };
+
   const populateFormErrorsWhenDirty = errors => {
     for (let key in errors) {
       if (formState[key] === "dirty") {
@@ -91,6 +107,9 @@ const FormValidator = ({ children, model, rules }) => {
 
   useEffect(() => {
     const { errors, hasErrors } = validateForm();
+    manualValidationList.forEach(field => {
+      errors[field] = null;
+    });
     populateFormErrorsWhenDirty(errors);
     setHasErrors(hasErrors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,7 +121,7 @@ const FormValidator = ({ children, model, rules }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formErrors]);
 
-  class FieldChangeHandler {
+  class FieldActions {
     static text({ target: { name, value } }) {
       setField(name, value);
     }
@@ -119,6 +138,7 @@ const FormValidator = ({ children, model, rules }) => {
 
   return children({
     validate,
+    validateField,
     hasErrors,
     formErrors,
     formState,
@@ -126,7 +146,7 @@ const FormValidator = ({ children, model, rules }) => {
     setField,
     clearValidation,
     resetForm,
-    update: FieldChangeHandler
+    update: FieldActions
   });
 };
 
