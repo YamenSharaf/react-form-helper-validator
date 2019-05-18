@@ -1,10 +1,11 @@
 {
   "name": "react-form-helper-validator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "⚡ Tiny library for form state/ validation written entirely with React Hooks",
   "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/.bin/babel src --out-file dist/index.js",
+    "pub": "yarn build && yarn publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
