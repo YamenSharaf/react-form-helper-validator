@@ -51,8 +51,8 @@ const FormValidator = ({
   };
 
   const clearValidation = () => {
-    setFormErrors(initialErrorObject);
     setFormState(initialFormElementsState);
+    setFormErrors(initialErrorObject);
   };
 
   const resetForm = () => {
@@ -73,15 +73,19 @@ const FormValidator = ({
     let hasErrors = false;
     const errors = {};
     Object.entries(rules).forEach(([key, arrayOfRules]) => {
-      arrayOfRules.forEach(rule => {
-        const error = rule(formData[key]);
-        if (error) {
+      let errorMessage = null;
+
+      for (let ruleFn of arrayOfRules) {
+        if (errorMessage) break;
+        const validationResult = ruleFn(formData[key]);
+        if (validationResult) {
+          errorMessage = validationResult;
           !hasErrors && (hasErrors = true);
-          errors[key] = error;
+          errors[key] = errorMessage;
         } else {
           errors[key] = null;
         }
-      });
+      }
     });
     return { errors, hasErrors };
   };
