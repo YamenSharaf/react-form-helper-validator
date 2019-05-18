@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var _react = require("react");
 
@@ -27,8 +27,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var FormValidator = function FormValidator(_ref) {
   var children = _ref.children,
-      model = _ref.model,
-      rules = _ref.rules;
+      _ref$model = _ref.model,
+      model = _ref$model === void 0 ? {} : _ref$model,
+      _ref$rules = _ref.rules,
+      rules = _ref$rules === void 0 ? {} : _ref$rules,
+      _ref$manual = _ref.manual,
+      manualValidationList = _ref$manual === void 0 ? [] : _ref$manual;
 
   var _useState = (0, _react.useState)(model),
       _useState2 = _slicedToArray(_useState, 2),
@@ -124,6 +128,15 @@ var FormValidator = function FormValidator(_ref) {
     };
   };
 
+  var validateField = function validateField(_ref4) {
+    var name = _ref4.target.name;
+    if (!rules[name]) return;
+    rules[name].forEach(function (rule) {
+      var errorMessage = rule(formData[name]);
+      errorMessage && formErrors[name] === null && setFieldError(name, errorMessage);
+    });
+  };
+
   var populateFormErrorsWhenDirty = function populateFormErrorsWhenDirty(errors) {
     for (var key in errors) {
       if (formState[key] === "dirty") {
@@ -137,6 +150,9 @@ var FormValidator = function FormValidator(_ref) {
         errors = _validateForm2.errors,
         hasErrors = _validateForm2.hasErrors;
 
+    manualValidationList.forEach(function (field) {
+      errors[field] = null;
+    });
     populateFormErrorsWhenDirty(errors);
     setHasErrors(hasErrors); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -147,48 +163,49 @@ var FormValidator = function FormValidator(_ref) {
     setHasErrors(hasErrors); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formErrors]);
 
-  var FieldChangeHandler =
+  var FieldActions =
   /*#__PURE__*/
   function () {
-    function FieldChangeHandler() {
-      _classCallCheck(this, FieldChangeHandler);
+    function FieldActions() {
+      _classCallCheck(this, FieldActions);
     }
 
-    _createClass(FieldChangeHandler, null, [{
+    _createClass(FieldActions, null, [{
       key: "text",
-      value: function text(_ref4) {
-        var _ref4$target = _ref4.target,
-            name = _ref4$target.name,
-            value = _ref4$target.value;
+      value: function text(_ref5) {
+        var _ref5$target = _ref5.target,
+            name = _ref5$target.name,
+            value = _ref5$target.value;
         setField(name, value);
       }
     }, {
       key: "checkbox",
-      value: function checkbox(_ref5) {
-        var _ref5$target = _ref5.target,
-            name = _ref5$target.name,
-            checked = _ref5$target.checked;
+      value: function checkbox(_ref6) {
+        var _ref6$target = _ref6.target,
+            name = _ref6$target.name,
+            checked = _ref6$target.checked;
         setField(name, checked);
       }
     }, {
       key: "radio",
-      value: function radio(_ref6) {
-        var _ref6$target = _ref6.target,
-            name = _ref6$target.name,
-            value = _ref6$target.value;
+      value: function radio(_ref7) {
+        var _ref7$target = _ref7.target,
+            name = _ref7$target.name,
+            value = _ref7$target.value;
         setField(name, value);
       }
     }]);
 
-    return FieldChangeHandler;
+    return FieldActions;
   }();
 
-  _defineProperty(FieldChangeHandler, "select", FieldChangeHandler.radio);
+  _defineProperty(FieldActions, "select", FieldActions.radio);
 
-  _defineProperty(FieldChangeHandler, "textarea", FieldChangeHandler.text);
+  _defineProperty(FieldActions, "textarea", FieldActions.text);
 
   return children({
     validate: validate,
+    validateField: validateField,
     hasErrors: hasErrors,
     formErrors: formErrors,
     formState: formState,
@@ -196,9 +213,9 @@ var FormValidator = function FormValidator(_ref) {
     setField: setField,
     clearValidation: clearValidation,
     resetForm: resetForm,
-    update: FieldChangeHandler
+    update: FieldActions
   });
 };
 
 var _default = FormValidator;
-exports.default = _default;
+exports["default"] = _default;
