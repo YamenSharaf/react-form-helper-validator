@@ -1,0 +1,24 @@
+{
+  "name": "react-form-helper-validator",
+  "version": "1.0.0",
+  "description": "⚡ Tiny library for form state/ validation written entirely with React Hooks",
+  "main": "FormHelper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YamenSharaf/react-form-helper-validator.git"
+  },
+  "keywords": [
+    "react",
+    "form",
+    "validation"
+  ],
+  "author": "Yamen Sharaf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YamenSharaf/react-form-helper-validator/issues"
+  },
+  "homepage": "https://github.com/YamenSharaf/react-form-helper-validator#readme"
+}
