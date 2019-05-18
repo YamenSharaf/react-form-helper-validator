@@ -88,8 +88,8 @@ var FormValidator = function FormValidator(_ref) {
   };
 
   var clearValidation = function clearValidation() {
-    setFormErrors(initialErrorObject);
     setFormState(initialFormElementsState);
+    setFormErrors(initialErrorObject);
   };
 
   var resetForm = function resetForm() {
@@ -111,16 +111,39 @@ var FormValidator = function FormValidator(_ref) {
           key = _ref3[0],
           arrayOfRules = _ref3[1];
 
-      arrayOfRules.forEach(function (rule) {
-        var error = rule(formData[key]);
+      var errorMessage = null;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-        if (error) {
-          !hasErrors && (hasErrors = true);
-          errors[key] = error;
-        } else {
-          errors[key] = null;
+      try {
+        for (var _iterator = arrayOfRules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var ruleFn = _step.value;
+          if (errorMessage) break;
+          var validationResult = ruleFn(formData[key]);
+
+          if (validationResult) {
+            errorMessage = validationResult;
+            !hasErrors && (hasErrors = true);
+            errors[key] = errorMessage;
+          } else {
+            errors[key] = null;
+          }
         }
-      });
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
     });
     return {
       errors: errors,
