@@ -78,7 +78,7 @@ var FormValidator = function FormValidator(_ref) {
 
   var validate = function validate() {
     return new Promise(function (resolve, reject) {
-      var _validateForm = validateForm(),
+      var _validateForm = validateForm(true),
           hasErrors = _validateForm.hasErrors,
           errors = _validateForm.errors;
 
@@ -103,7 +103,7 @@ var FormValidator = function FormValidator(_ref) {
     });
   };
 
-  var validateForm = function validateForm() {
+  var validateForm = function validateForm(force) {
     var hasErrors = false;
     var errors = {};
     Object.entries(rules).forEach(function (_ref2) {
@@ -119,7 +119,7 @@ var FormValidator = function FormValidator(_ref) {
       try {
         for (var _iterator = arrayOfRules[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var ruleFn = _step.value;
-          if (errorMessage) break;
+          if (errorMessage || !force && manualValidationList.includes(key)) break;
           var validationResult = ruleFn(formData[key]);
 
           if (validationResult) {
@@ -156,7 +156,12 @@ var FormValidator = function FormValidator(_ref) {
     if (!rules[name]) return;
     rules[name].forEach(function (rule) {
       var errorMessage = rule(formData[name]);
-      errorMessage && formErrors[name] === null && setFieldError(name, errorMessage);
+
+      if (errorMessage && formErrors[name] === null) {
+        setFieldError(name, errorMessage);
+      } else {
+        setFieldError(name, null);
+      }
     });
   };
 
@@ -173,9 +178,6 @@ var FormValidator = function FormValidator(_ref) {
         errors = _validateForm2.errors,
         hasErrors = _validateForm2.hasErrors;
 
-    manualValidationList.forEach(function (field) {
-      errors[field] = null;
-    });
     populateFormErrorsWhenDirty(errors);
     setHasErrors(hasErrors); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);

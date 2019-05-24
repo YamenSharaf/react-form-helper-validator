@@ -44,7 +44,7 @@ const FormValidator = ({
 
   const validate = () => {
     return new Promise((resolve, reject) => {
-      const { hasErrors, errors } = validateForm();
+      const { hasErrors, errors } = validateForm(true);
       setFormErrors(errors);
       !hasErrors ? resolve() : reject(errors);
     });
@@ -69,14 +69,15 @@ const FormValidator = ({
     });
   };
 
-  const validateForm = () => {
+  const validateForm = force => {
     let hasErrors = false;
     const errors = {};
     Object.entries(rules).forEach(([key, arrayOfRules]) => {
       let errorMessage = null;
 
       for (let ruleFn of arrayOfRules) {
-        if (errorMessage) break;
+        if (errorMessage || (!force && manualValidationList.includes(key)))
+          break;
         const validationResult = ruleFn(formData[key]);
         if (validationResult) {
           errorMessage = validationResult;
@@ -95,9 +96,11 @@ const FormValidator = ({
 
     rules[name].forEach(rule => {
       const errorMessage = rule(formData[name]);
-      errorMessage &&
-        formErrors[name] === null &&
+      if (errorMessage && formErrors[name] === null) {
         setFieldError(name, errorMessage);
+      } else {
+        setFieldError(name, null);
+      }
     });
   };
 
@@ -111,9 +114,6 @@ const FormValidator = ({
 
   useEffect(() => {
     const { errors, hasErrors } = validateForm();
-    manualValidationList.forEach(field => {
-      errors[field] = null;
-    });
     populateFormErrorsWhenDirty(errors);
     setHasErrors(hasErrors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
