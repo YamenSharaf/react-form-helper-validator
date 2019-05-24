@@ -90,8 +90,8 @@ and then wrap your form with FormHelper like so while providing required props
 
 ## Props
 
-| Prop   | Required | purpose                                                                                                                                                       | Type   |
-| ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| model  | true     | Provides initial form data                                                                                                                                    | Object |
-| rules  | false    | An object containing an array of rules which corresponds to data properties. Rules are functions that return an error `string` on error and `false` otherwise | Object |
-| manual | false    | An array of field names which shall not be validated automatically on change                                                                                  | Array  |
+| Prop   | Required | Type   | Purpose                                                                                                                                                       |
+| ------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| model  | true     | Object | Provides initial form data                                                                                                                                    |
+| rules  | false    | Object | An object containing an array of rules which corresponds to data properties. Rules are functions that return an error `string` on error and `false` otherwise |
+| manual | false    | Array  | An array of field names which shall not be validated automatically on change                                                                                  |
