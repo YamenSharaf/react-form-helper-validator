@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import rules from "rules";
 
 const FormValidator = ({
   children,
@@ -91,17 +92,29 @@ const FormValidator = ({
     return { errors, hasErrors };
   };
 
-  const validateField = ({ target: { name } }) => {
-    if (!rules[name]) return;
-
-    rules[name].forEach(rule => {
-      const errorMessage = rule(formData[name]);
-      if (errorMessage && formErrors[name] === null) {
-        setFieldError(name, errorMessage);
-      } else {
-        setFieldError(name, null);
+  const getFieldValidation = name => {
+    let errorMessage = null;
+    rules[name].forEach(ruleFn => {
+      const validationResult = ruleFn(formData[name]);
+      if (!errorMessage && !validationResult) {
+        return;
+      } else if (errorMessage && validationResult) {
+        return;
+      } else if (!errorMessage && validationResult) {
+        errorMessage = validationResult;
       }
     });
+    return errorMessage;
+  };
+
+  const validateField = name => {
+    if (!rules[name]) return;
+    const error = getFieldValidation(name);
+    if (error) {
+      setFieldError(name, error);
+    } else {
+      setFieldError(name, null);
+    }
   };
 
   const populateFormErrorsWhenDirty = errors => {
@@ -154,4 +167,4 @@ const FormValidator = ({
   });
 };
 
-export default FormValidator;
+export { FormValidator as default, rules };
