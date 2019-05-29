@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import rules from "rules";
 
 const FormValidator = ({
   children,
@@ -167,4 +166,4 @@ const FormValidator = ({
   });
 };
 
-export { FormValidator as default, rules };
+export default FormValidator;
