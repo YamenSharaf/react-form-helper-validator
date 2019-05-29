@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import validationRules from "./rules";
-
-export const valid = validationRules;
 
 const FormValidator = ({
   children,
