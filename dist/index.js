@@ -3,19 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "rules", {
-  enumerable: true,
-  get: function get() {
-    return _rules["default"];
-  }
-});
 exports["default"] = void 0;
 
 var _react = require("react");
-
-var _rules = _interopRequireDefault(require("rules"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -265,40 +255,5 @@ var FormValidator = function FormValidator(_ref) {
   });
 };
 
-exports["default"] = FormValidator;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _default = {
-  required: function required(value, field) {
-    return !value ? "".concat(field, " is required") : false;
-  },
-  selected: function selected(value, fieldError) {
-    return value === true ? false : fieldError;
-  },
-  email: function email(value, field) {
-    if (!value) return false;
-    var EMAIL_PATTERN = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return EMAIL_PATTERN.test(value) ? false : "Please enter a valid ".concat(field);
-  },
-  letters: function letters(value, field) {
-    if (!value) return false;
-    return value && /^[a-zA-Z\s]+$/.test(value.trim()) ? false : "".concat(field, " must be letters and spaces only");
-  },
-  max: function max(value, _max, field) {
-    if (!value) return false;
-    return value.length <= _max ? false : "".concat(field, " cannot be more than ").concat(_max, " characters");
-  },
-  min: function min(value, _min, field) {
-    if (!value) return false;
-    return value.length > _min ? false : "".concat(field, " cannot be less than ").concat(_min, " characters");
-  },
-  alphanumeric: function alphanumeric(value, field) {
-    if (!value) return false;
-    return /^[a-z0-9]+$/i.test(value) ? false : "".concat(field, " should be letters and numbers only");
-  }
-};
+var _default = FormValidator;
 exports["default"] = _default;
